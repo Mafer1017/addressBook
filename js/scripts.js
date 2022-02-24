@@ -29,13 +29,29 @@ AddressBook.prototype.deleteContact = function(id) {
   return true;
 };
 
+AddressBook.prototype.addHomePhone = function(id) {
+  if (this.contacts[id] === undefined) {
+    return false;
+  }
+  delete this.contacts[id];
+  return true;
+};
+
+
 // Business Logic for Contacts ---------
-function Contact(firstName, lastName, phoneNumber, emailAddress, physicalAddress) {
+function Contact(firstName, lastName, phoneNumbers, newEmail, newAddress) {
   this.firstName = firstName;
   this.lastName = lastName;
-  this.phoneNumber = phoneNumber;
-  this.emailAddress = emailAddress;
-  this.physicalAddress = physicalAddress;
+  this.phoneNumbers = phoneNumbers;
+  this.newEmail = newEmail;
+  this.newAddress = newAddress;
+}
+
+function multiPhone(home, work, emergencycontact, other) {
+  this.home = home;
+  this.work = work;
+  this.emergencycontact = emergencycontact;
+  this.other = other;
 }
 
 Contact.prototype.fullName = function() {
@@ -61,20 +77,22 @@ function showContact(contactId) {
   $(".first-name").html(contact.firstName);
   $(".last-name").html(contact.lastName);
   $(".phone-number").html(contact.phoneNumber);
-  $(".email-address").html(contact.emailAddress);
-  $(".physical-address").html(contact.physicalAddress);
+  $(".new-email").html(contact.newEmail);
+  $(".new-address").html(contact.newAddress);
   let buttons = $("#buttons");
+
   buttons.empty();
   buttons.append("<button class='deleteButton' id=" +  + contact.id + ">Delete</button>");
 }
 
-function attachContactListeners(){
+function attachContactListeners() {
   $("ul#contacts").on("click", "li", function() {
     showContact(this.id);
   });
-  $("#buttons").on("click", ".deleteButton", function () {
+  $("#buttons").on("click", ".deleteButton", ".updateButton", function() {
     addressBook.deleteContact(this.id);
     $("#show-contact").hide();
+    
     displayContactDetails(addressBook);
   });
 }
@@ -85,29 +103,20 @@ $(document).ready(function() {
     event.preventDefault();
     const inputtedFirstName = $("input#new-first-name").val();
     const inputtedLastName = $("input#new-last-name").val();
-    const inputtedPhoneNumber = $("input#new-phone-number").val();
-    const inputtedEmailAddress = $("input#new-email-address").val();
-    // const inputtedWorkAddrress = $("inputted#new-work-address").val();
-    const inputtedPhysicalAddress = $("input#new-physical-address").val();
-
-    $("input#new-first-name").val("")
+    const inputtedAddEmail = $("input#new-email").val();
+    const inputtedSchool = $("input#school").val();
+    const inputtedWork = $("input#work").val();
+    const inputtedEmergencyContact = $("input#emergencyContact").val();
+    const inputtedOther = $("input#other").val();
+    const inputtedAddress = $("input#new-address").val();
+    $("input#new-first-name").val("");
     $("input#new-last-name").val("");
-    $("input#new-phone-number").val("");
-    $("input#new-email-address").val("");
-    $("input#new-physical-address").val("");
-
-
-    let newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, inputtedEmailAddress, inputtedPhysicalAddress);
+    $("input#new-email").val("");
+    $("input#new-address").val("");
+    const phoneNumbers = new multiPhone(inputtedSchool, inputtedWork, inputtedEmergencyContact, inputtedOther);
+    const newContact = new Contact(inputtedFirstName, inputtedLastName, phoneNumbers, inputtedAddEmail, inputtedAddress);
+    console.log(phoneNumbers);
     addressBook.addContact(newContact);
     displayContactDetails(addressBook);
-    
-    
   });
 });
-
-// Contact.prototype.updateContact = function(updateContact) {
-//   if (this.contacts(updateContact) === undefined) {
-//     return false;
-//   }
-//   this.lastName = firstName.replace("")
-// }
