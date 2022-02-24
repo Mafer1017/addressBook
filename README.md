@@ -16,8 +16,6 @@
 * Navigate to top-level of directory
 * Open index.html in the browser of your choice
 
----
-
 ## License
 
 [MIT](https://opensource.org/licenses/MIT)
